@@ -1,0 +1,23 @@
+{
+    "data": {
+        "count": "44",
+        "cuxiao": "优唻，优来，又来，由来，友来",
+        "dizhi": "建外SOHO东区9号楼底商",
+        "gz_counts": "53",
+        "id": "1",
+        "isgz": "0",
+        "isopen": "1",
+        "jd": "116.412895000000",
+        "juli": "106140",
+        "linkphone": "13121376887",
+        "p_sale": "8",
+        "pic": "http://123.57.69.84:8888/images/ijdj@2x.png",
+        "pingfen": "10.0",
+        "pj_counts": "7",
+        "shopname": "DailyClick",
+        "wd": "39.898591000000",
+        "xinxi": "",
+        "yingye": "早6点-晚9点"
+    },
+    "state": "1"
+}
