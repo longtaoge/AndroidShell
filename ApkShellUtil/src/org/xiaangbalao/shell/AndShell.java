@@ -28,7 +28,7 @@ public class AndShell {
 	public static void main(String[] args) {
 
 		// 检查输入的参数是否正确
-		checkArgs(args);
+		//checkArgs(args);
 
 		try {
 			File payloadSrcFile = new File(apkPath);
@@ -117,9 +117,12 @@ public class AndShell {
 			}
 
 		} else {
-
+			apkPath = args[0];
 			System.out.println("APK录径：" + args[0]);
+
+			shellDexPath = args[1];
 			System.out.println("dex录径：" + args[1]);
+			newDexFile = args[2];
 			System.out.println("生成的dex：" + args[2]);
 		}
 	}
@@ -132,6 +135,14 @@ public class AndShell {
 	 */
 
 	private static byte[] encrpt(byte[] srcdata) {
+		
+	
+
+		// 模似加密数据
+		for (int i = 0; i < srcdata.length; i++) {
+			srcdata[i] = (byte) (srcdata[i] ^ 3);
+		}
+
 		return srcdata;
 	}
 
