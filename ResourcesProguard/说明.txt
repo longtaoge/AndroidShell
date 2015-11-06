@@ -1,0 +1,39 @@
+资源文件混淆工具，主要用于资源文件的混淆 
+
+使用方法
+
+ 1 将apk放入文件夹，
+
+  2 修改 批处理文件  buildApk.bat
+
+
+java -jar resourcesproguard.jar eloan.apk -config config.xml -out outapk -signature  xiangbalao.keystore longtaogemima longtaogemima xiangbalao
+
+--------------------------------APK 名------- -config  配置文件 -out  输出目录————————    -signature  签名路径及文件名 -密码 -密码- 别名 
+
+
+ 3 双击  buildApk.bat
+ 
+  4   输出目录 中 应用名_signed.apk  为已签名  应用名_unsigned.apk 为未签名应用 
+
+
+
+
+
+config.xml  为配置文件，  
+
+buildApk.bat 中的签名信息将覆盖 config.xml 中的配置项
+
+                        
+
+
+
+
+						
+						
+%JAVA_HOME%\bin;
+%ANDROID_HOME%\tools;
+%ANDROID_HOME%\platform-tools;
+D:\Program\apache-ant-1.9.4\bin;
+E:\Android_IDE\sdk\build-tools\23.0.0;
+
