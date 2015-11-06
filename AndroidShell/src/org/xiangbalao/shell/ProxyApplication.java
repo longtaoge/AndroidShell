@@ -165,7 +165,7 @@ public class ProxyApplication extends Application {
 	 * @throws IOException
 	 */
 	private void splitPayLoadFromDex(byte[] data) throws IOException {
-		byte[] apkdata = decrypt(data); // 解壳程序的dex并没有加密，所以也不需要解密
+		byte[] apkdata = data; 
 		int ablen = apkdata.length;
 		// 取被加壳apk的长度 这里的长度取值，对应加壳时长度的赋值都可以做些简化
 		byte[] dexlen = new byte[4];
@@ -178,7 +178,7 @@ public class ProxyApplication extends Application {
 		// 把被加壳apk内容拷贝到newdex中
 		System.arraycopy(apkdata, ablen - 4 - readInt, newdex, 0, readInt);
 		// 这里应该加上对于apk的解密操作，若加壳是加密处理的话
-		// ?
+		newdex=decrypt(newdex);
 		// 写入apk文件
 		File file = new File(apkFileName);
 		try {
@@ -256,6 +256,10 @@ public class ProxyApplication extends Application {
 
 	// //直接返回数据，读者可以添加自己解密方法
 	private byte[] decrypt(byte[] data) {
+		// 模似解密数据
+		for (int i = 0; i < data.length; i++) {
+			data[i] = (byte) (data[i] ^ 3);
+		}
 		return data;
 	}
 }
