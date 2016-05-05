@@ -22,7 +22,9 @@ import android.content.Context;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
+import android.os.Build;
 import android.os.Bundle;
+import android.util.ArrayMap;
 
 public class ProxyApplication extends Application {
 	@SuppressWarnings("unused")
@@ -58,11 +60,20 @@ public class ProxyApplication extends Application {
 														// http://blog.csdn.net/myarrow/article/details/14223493
 			String packageName = this.getPackageName();// 当前apk的包名
 			// 下面两句不是太理解
-			HashMap mPackages = (HashMap) RefInvoke.getFieldOjbect(
-					"android.app.ActivityThread", currentActivityThread,
-					"mPackages");
-			WeakReference wr = (WeakReference) mPackages.get(packageName);
-			// 创建被加壳apk的DexClassLoader对象 加载apk内的类和本地代码（c/c++代码）
+			WeakReference wr;
+			if(Build.VERSION.SDK_INT < 19){
+				HashMap mPackages = (HashMap) RefInvoke.getFieldOjbect(
+                        "android.app.ActivityThread", currentActivityThread,
+                        "mPackages");
+                wr = (WeakReference) mPackages.get(packageName);
+            } else {
+				ArrayMap mPackages = (ArrayMap) RefInvoke.getFieldOjbect(
+                        "android.app.ActivityThread", currentActivityThread,
+                        "mPackages");
+                wr = (WeakReference) mPackages.get(packageName);
+
+            }
+            // 创建被加壳apk的DexClassLoader对象 加载apk内的类和本地代码（c/c++代码）
 			DexClassLoader dLoader = new DexClassLoader(apkFileName, odexPath,
 					libPath, (ClassLoader) RefInvoke.getFieldOjbect(
 							"android.app.LoadedApk", wr.get(), "mClassLoader"));
@@ -140,12 +151,21 @@ public class ProxyApplication extends Application {
 			RefInvoke.setFieldOjbect("android.app.ActivityThread",
 					"mInitialApplication", currentActivityThread, app);
 
-			// 5.0 以上系统 android.util.ArrayMap cannot be cast to
-			// java.util.HashMap
-			HashMap mProviderMap = (HashMap) RefInvoke.getFieldOjbect(
-					"android.app.ActivityThread", currentActivityThread,
-					"mProviderMap");
-			Iterator it = mProviderMap.values().iterator();
+			Iterator it;
+			if(Build.VERSION.SDK_INT < 19){
+				// 解决了类型强转错误的问题，原因：
+				// 4.4以下系统 mProviderMap 的类型是 HashMap
+				// 4.4以上系统 mProviderMap 的类型是 ArrayMap
+				HashMap mProviderMap = (HashMap) RefInvoke.getFieldOjbect(
+						"android.app.ActivityThread", currentActivityThread,
+						"mProviderMap");
+				it = mProviderMap.values().iterator();
+			}else{
+				ArrayMap mProviderMap = (ArrayMap) RefInvoke.getFieldOjbect(
+						"android.app.ActivityThread", currentActivityThread,
+						"mProviderMap");
+				it = mProviderMap.values().iterator();
+			}
 			while (it.hasNext()) {
 				Object providerClientRecord = it.next();
 				Object localProvider = RefInvoke.getFieldOjbect(
